@@ -1,10 +1,10 @@
-﻿using Contracts;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
-using Repository;
-using Services.Contracts;
-using Services;
+using Repository.Interfaces;
+using Services.Interfaces;
+using Repository.Providers;
+using Services.Providers;
 
 namespace ServiceExtensions
 {

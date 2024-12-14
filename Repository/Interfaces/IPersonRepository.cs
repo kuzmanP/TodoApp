@@ -1,6 +1,6 @@
 ﻿using Entities;
 
-namespace Contracts
+namespace Repository.Interfaces
 {
     public interface IPersonRepository
     {

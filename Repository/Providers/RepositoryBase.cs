@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 
-namespace Repository
+namespace Repository.Providers
 {
     public class RepositoryBase<T> : IRepositoryBase<T> where T : class
     {

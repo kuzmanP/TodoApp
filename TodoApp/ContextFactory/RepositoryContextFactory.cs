@@ -1,7 +1,7 @@
 ﻿using System.Globalization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
-using Repository;
+using Repository.Providers;
 
 namespace TodoApp.ContextFactory
 {

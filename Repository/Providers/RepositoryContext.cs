@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 
 
-namespace Repository
+namespace Repository.Providers
 {
     public class RepositoryContext(DbContextOptions<RepositoryContext> options) : DbContext(options)
     {
@@ -10,6 +10,6 @@ namespace Repository
         public DbSet<Tasks> Tasks { get; set; }
     }
 
-   
+
 
 }

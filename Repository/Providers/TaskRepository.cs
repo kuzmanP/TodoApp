@@ -1,17 +1,18 @@
 ﻿using Contracts;
 using Entities;
+using Repository.Interfaces;
 
-namespace Repository
+namespace Repository.Providers
 {
-    public class TaskRepository: RepositoryBase<Tasks>,ITaskRepository
+    public class TaskRepository : RepositoryBase<Tasks>, ITaskRepository
     {
         private readonly RepositoryContext _repositoryContext;
 
-        public TaskRepository(RepositoryContext repositoryContext):base(repositoryContext)
+        public TaskRepository(RepositoryContext repositoryContext) : base(repositoryContext)
         {
             _repositoryContext = repositoryContext;
         }
-        
+
         public async Task<IEnumerable<Tasks>> GetAllTasksAsync(CancellationToken cancellation)
         {
             var tasks = await FindAllAsync(cancellation);

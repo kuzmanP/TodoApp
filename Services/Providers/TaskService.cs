@@ -2,12 +2,12 @@
 using Contracts;
 using Entities;
 using Microsoft.Extensions.Logging;
-using Services.Contracts;
+using Services.Interfaces;
 using Shared.Dtos.Task;
 
-namespace Services
+namespace Services.Providers
 {
-    public class TaskService:ITaskService
+    public class TaskService : ITaskService
     {
         private readonly IRepositoryManager _repositoryManager;
         private readonly IMapper _mapper;
@@ -26,7 +26,7 @@ namespace Services
             _logger.LogDebug("Log");
             var getTasks = await _repositoryManager.TaskRepository.GetAllTasksAsync(cancellationToken);
             var getTasksOut = _mapper.Map<IEnumerable<TaskDto>>(getTasks);
-            
+
             return getTasksOut;
         }
 
@@ -68,7 +68,7 @@ namespace Services
 
         public async Task<bool> CreateTask(Guid personId, CreateTaskDto createTask, CancellationToken cancellationToken)
         {
-           
+
             var personEntity = await _repositoryManager.PersonRepository.GetUniquePersonAsync(personId, cancellationToken);
             if (personEntity == null)
             {
@@ -87,7 +87,7 @@ namespace Services
             taskEntity.PersonId = personId;
             entity.Task.Add(taskEntity);
             var createTaskEntity = await _repositoryManager.TaskRepository.CreateTasksAsync(taskEntity, cancellationToken);
-             _repositoryManager.Save();
+            _repositoryManager.Save();
 
             return true;
         }
@@ -103,8 +103,8 @@ namespace Services
 
         public async Task<bool> CheckTaskStatus(Guid taskId, CancellationToken cancellationToken)
         {
-            var taskStatus =await _repositoryManager.TaskRepository.GetUniqueTasksAsync(taskId,cancellationToken);
-            if (!taskStatus.IsCompleted == true )
+            var taskStatus = await _repositoryManager.TaskRepository.GetUniqueTasksAsync(taskId, cancellationToken);
+            if (!taskStatus.IsCompleted == true)
             {
                 return false;
             }
@@ -114,7 +114,7 @@ namespace Services
 
         public async Task<bool> SetTaskStatus(Guid taskId, int setCode, CancellationToken cancellationToken)
         {
-            var getTask =await _repositoryManager.TaskRepository.GetUniqueTasksAsync(taskId, cancellationToken);
+            var getTask = await _repositoryManager.TaskRepository.GetUniqueTasksAsync(taskId, cancellationToken);
             if (setCode == 1)
             {
                 getTask.IsCompleted = true;
@@ -123,14 +123,14 @@ namespace Services
                 return true;
             }
             getTask.IsCompleted = false;
-                await _repositoryManager.TaskRepository.UpdateTasksAsync(getTask, cancellationToken);
+            await _repositoryManager.TaskRepository.UpdateTasksAsync(getTask, cancellationToken);
             _repositoryManager.Save();
             return false;
         }
 
-        public  IEnumerable<TaskDto> GetAllOverdueTask(CancellationToken cancellation)
+        public IEnumerable<TaskDto> GetAllOverdueTask(CancellationToken cancellation)
         {
-            var overDueTasks =  _repositoryManager.TaskRepository.GetAllTasksAsync(cancellation).Result
+            var overDueTasks = _repositoryManager.TaskRepository.GetAllTasksAsync(cancellation).Result
                 .Where(o => o.DueDate < DateOnly.FromDateTime(DateTime.UtcNow));
             var overdueToOutput = _mapper.Map<IEnumerable<TaskDto>>(overDueTasks);
             return overdueToOutput;
@@ -138,16 +138,16 @@ namespace Services
 
         public async Task<IEnumerable<TaskDto>> FetchPersonTask(Guid personId, CancellationToken cancellation)
         {
-            var personEntity =await  _repositoryManager.PersonRepository.GetUniquePersonAsync(personId, cancellation);
+            var personEntity = await _repositoryManager.PersonRepository.GetUniquePersonAsync(personId, cancellation);
             if (personEntity == null)
             {
                 throw new ArgumentException("Person not found.");
             }
 
             var personTasks = await _repositoryManager.TaskRepository.GetAllTasksAsync(cancellation);
-            var personTaskOut = _mapper.Map <IEnumerable<TaskDto>>(personTasks.Where(p => p.PersonId.Equals(personId)));
+            var personTaskOut = _mapper.Map<IEnumerable<TaskDto>>(personTasks.Where(p => p.PersonId.Equals(personId)));
             return personTaskOut;
         }
     }
-    
+
 }

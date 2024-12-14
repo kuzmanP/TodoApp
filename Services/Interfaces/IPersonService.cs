@@ -1,6 +1,6 @@
 ﻿using Shared.Dtos.Person;
 
-namespace Services.Contracts
+namespace Services.Interfaces
 {
     public interface IPersonService
     {

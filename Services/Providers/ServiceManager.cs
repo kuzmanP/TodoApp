@@ -1,9 +1,9 @@
-﻿ using Services.Contracts;
- using Contracts;
+﻿using Contracts;
 using AutoMapper;
 using Microsoft.Extensions.Logging;
+using Services.Interfaces;
 
-namespace Services
+namespace Services.Providers
 {
     public class ServiceManager : IServiceManager
     {
@@ -12,7 +12,7 @@ namespace Services
         public ServiceManager(IRepositoryManager repositoryManager, IMapper mapper, ILogger<TaskService> logger)
         {
             _personService = new Lazy<IPersonService>(() => new PersonService(repositoryManager, mapper));
-            _taskService = new Lazy<ITaskService>(() => new TaskService(repositoryManager, mapper,  logger));
+            _taskService = new Lazy<ITaskService>(() => new TaskService(repositoryManager, mapper, logger));
         }
 
         public IPersonService PersonService => _personService.Value;

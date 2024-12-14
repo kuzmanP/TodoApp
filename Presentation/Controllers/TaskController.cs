@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Services.Contracts;
+using Services.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Shared.Dtos.Task;
 

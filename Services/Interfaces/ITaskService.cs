@@ -1,6 +1,6 @@
 ﻿using Shared.Dtos.Task;
 
-namespace Services.Contracts
+namespace Services.Interfaces
 {
     public interface ITaskService
     {
