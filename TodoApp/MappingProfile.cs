@@ -10,6 +10,7 @@ namespace TodoApp
         public MappingProfile()
         {
             CreateMap<Person, PersonDto>().ReverseMap();
+            CreateMap<Person, UpdatePersonDto>().ReverseMap();
             CreateMap<Person, CreatePersonDto>().ReverseMap();
             CreateMap<Tasks, CreateTaskDto>().ReverseMap();
             CreateMap<Tasks, TaskDto>().ReverseMap();

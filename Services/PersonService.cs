@@ -38,8 +38,8 @@ namespace Services
 
         public async Task<bool> UpdatePerson(Guid Id, UpdatePersonDto person, CancellationToken cancellationToken)
         {
-            var entity = _repositoryManager.PersonRepository.GetUniquePersonAsync(Id, cancellationToken);
-            var entityDto = _mapper.Map(person, entity).Result;
+            var entity =await _repositoryManager.PersonRepository.GetUniquePersonAsync(Id, cancellationToken);
+            var entityDto = _mapper.Map(person, entity);
             try
             {
                 var updatePerson =await _repositoryManager.PersonRepository.UpdatePersonAsync(entityDto, cancellationToken);
