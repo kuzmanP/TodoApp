@@ -1,6 +1,7 @@
-﻿using Contracts;
+﻿
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
+using Interfaces;
 
 namespace Repository.Providers
 {

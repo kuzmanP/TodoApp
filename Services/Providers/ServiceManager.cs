@@ -1,6 +1,7 @@
-﻿using Contracts;
+﻿
 using AutoMapper;
 using Microsoft.Extensions.Logging;
+using Repository.Interfaces;
 using Services.Interfaces;
 
 namespace Services.Providers

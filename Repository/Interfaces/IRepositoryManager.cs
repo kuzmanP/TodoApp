@@ -1,6 +1,4 @@
-﻿using Contracts;
-
-namespace Repository.Interfaces
+﻿namespace Repository.Interfaces
 {
     public interface IRepositoryManager
     {

@@ -21,7 +21,7 @@ namespace Presentation.Controllers
         [ProducesResponseType(StatusCodes.Status302Found)]
         public async  Task<IEnumerable<PersonDto>> GetAllPersons(CancellationToken cancellation)
         {
-            var getAllPersons =await _serviceManager.PersonService.GetAllPerson(cancellation);
+            var getAllPersons =await _serviceManager.PersonService.GetAll(cancellation);
             return getAllPersons;
 
         }
@@ -30,7 +30,7 @@ namespace Presentation.Controllers
         [ProducesResponseType(StatusCodes.Status302Found)]
         public async Task<PersonDto> GetUniquePerson(Guid Id, CancellationToken cancellation)
         {
-            var getSinglePersons =await  _serviceManager.PersonService.GetPersonById(Id, cancellation);
+            var getSinglePersons =await  _serviceManager.PersonService.GetById(Id, cancellation);
             return getSinglePersons;
 
         }
@@ -39,7 +39,7 @@ namespace Presentation.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<bool> UpdatePerson(Guid Id, [FromBody] UpdatePersonDto updatePerson, CancellationToken cancellation)
         {
-            var result =await _serviceManager.PersonService.UpdatePerson(Id, updatePerson, cancellation);
+            var result =await _serviceManager.PersonService.Update(Id, updatePerson, cancellation);
             return result;
 
         }
@@ -48,7 +48,7 @@ namespace Presentation.Controllers
         [ProducesResponseType(StatusCodes.Status201Created)]
         public async Task<bool> CreatePerson([FromBody] CreatePersonDto createPerson, CancellationToken cancellation)
         {
-            var result =await  _serviceManager.PersonService.CreatePerson(createPerson, cancellation);
+            var result =await  _serviceManager.PersonService.Create(createPerson, cancellation);
             return result;
 
         }
@@ -57,7 +57,7 @@ namespace Presentation.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<bool> DeletePerson(Guid Id, CancellationToken cancellation)
         {
-            var result =await _serviceManager.PersonService.DeletePerson(Id, cancellation);
+            var result =await _serviceManager.PersonService.Delete(Id, cancellation);
             return result;
 
         }

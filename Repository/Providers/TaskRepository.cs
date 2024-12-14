@@ -1,4 +1,4 @@
-﻿using Contracts;
+﻿
 using Entities;
 using Repository.Interfaces;
 
@@ -13,20 +13,20 @@ namespace Repository.Providers
             _repositoryContext = repositoryContext;
         }
 
-        public async Task<IEnumerable<Tasks>> GetAllTasksAsync(CancellationToken cancellation)
+        public async Task<IEnumerable<Tasks>> GetAllAsync(CancellationToken cancellation)
         {
             var tasks = await FindAllAsync(cancellation);
             return tasks;
         }
 
-        public async Task<bool> DeleteTasksAsync(Guid Id, CancellationToken cancellation)
+        public async Task<bool> DeleteAsync(Guid Id, CancellationToken cancellation)
         {
-            var entity = await GetUniqueTasksAsync(Id, cancellation);
+            var entity = await GetUniqueAsync(Id, cancellation);
             await DeleteAsync(entity, cancellation);
             return true;
         }
 
-        public async Task<Tasks> GetUniqueTasksAsync(Guid Id, CancellationToken cancellation)
+        public async Task<Tasks> GetUniqueAsync(Guid Id, CancellationToken cancellation)
         {
             var uniqueTask = await FindByConditionAsync(l => l.Id.Equals(Id), trackChanges: false, cancellation);
             var result = uniqueTask.SingleOrDefault();
@@ -34,7 +34,7 @@ namespace Repository.Providers
         }
 
 
-        public async Task<bool> CreateTasksAsync(Tasks tasks, CancellationToken cancellation)
+        public async Task<bool> CreateAsync(Tasks tasks, CancellationToken cancellation)
         {
             try
             {
@@ -47,7 +47,7 @@ namespace Repository.Providers
             }
         }
 
-        public async Task<bool> UpdateTasksAsync(Tasks tasks, CancellationToken cancellation)
+        public async Task<bool> UpdateAsync(Tasks tasks, CancellationToken cancellation)
         {
             try
             {
