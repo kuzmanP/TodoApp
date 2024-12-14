@@ -1,10 +1,4 @@
-﻿using Shared.Dtos.Person;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Shared.Dtos.Task;
+﻿using Shared.Dtos.Task;
 
 namespace Services.Contracts
 {

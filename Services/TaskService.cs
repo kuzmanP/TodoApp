@@ -1,14 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
-using AutoMapper;
+﻿using AutoMapper;
 using Contracts;
 using Entities;
+using Microsoft.Extensions.Logging;
 using Services.Contracts;
-using Shared.Dtos.Person;
 using Shared.Dtos.Task;
 
 namespace Services
@@ -17,18 +11,22 @@ namespace Services
     {
         private readonly IRepositoryManager _repositoryManager;
         private readonly IMapper _mapper;
+        private readonly ILogger<TaskService> _logger;
 
-        public TaskService(IRepositoryManager repositoryManager, IMapper mapper)
+        public TaskService(IRepositoryManager repositoryManager, IMapper mapper, ILogger<TaskService> logger)
         {
             _repositoryManager = repositoryManager;
             _mapper = mapper;
+            _logger = logger;
         }
 
 
         public async Task<IEnumerable<TaskDto>> GetAllTasks(CancellationToken cancellationToken)
         {
+            _logger.LogDebug("Log");
             var getTasks = await _repositoryManager.TaskRepository.GetAllTasksAsync(cancellationToken);
             var getTasksOut = _mapper.Map<IEnumerable<TaskDto>>(getTasks);
+            
             return getTasksOut;
         }
 
