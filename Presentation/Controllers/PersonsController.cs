@@ -8,11 +8,11 @@ namespace Presentation.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class PersonController : ControllerBase
+    public class PersonsController : ControllerBase
     {
         private readonly IServiceManager _serviceManager;
 
-        public PersonController(IServiceManager serviceManager)
+        public PersonsController(IServiceManager serviceManager)
         {
             _serviceManager = serviceManager;
         }
@@ -28,7 +28,7 @@ namespace Presentation.Controllers
 
         [HttpGet("singlePerson")]
         [ProducesResponseType(StatusCodes.Status302Found)]
-        public async Task<PersonDto> GetUniquePerson(Guid Id, CancellationToken cancellation)
+        public async Task<PersonDto?> GetUniquePerson(Guid Id, CancellationToken cancellation)
         {
             var getSinglePersons =await  _serviceManager.PersonService.GetById(Id, cancellation);
             return getSinglePersons;

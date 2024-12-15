@@ -41,7 +41,7 @@ namespace Repository.Providers
             return singlePersonOut;
         }
 
-        public async Task<bool> CreateAsync(Person person, CancellationToken cancellation)
+        public  async Task<bool> CreatePersonAsync(Person person, CancellationToken cancellation)
         {
             try
             {
@@ -55,7 +55,7 @@ namespace Repository.Providers
             }
         }
 
-        public async Task<bool> UpdateAsync(Person person, CancellationToken cancellation)
+        public new async Task<bool> UpdateAsync(Person person, CancellationToken cancellation)
         {
             try
             {

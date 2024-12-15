@@ -7,11 +7,11 @@ namespace Presentation.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class TaskController:ControllerBase
+    public class TasksController:ControllerBase
     {
         private readonly IServiceManager _serviceManager;
 
-        public TaskController(IServiceManager serviceManager)
+        public TasksController(IServiceManager serviceManager)
         {
             _serviceManager = serviceManager;
         }
@@ -27,7 +27,7 @@ namespace Presentation.Controllers
 
         [HttpGet("singleTask")]
         [ProducesResponseType(StatusCodes.Status302Found)]
-        public async Task<TaskDto> GetUniqueTask(Guid taskId, CancellationToken cancellation)
+        public async Task<TaskDto?> GetUniqueTask(Guid taskId, CancellationToken cancellation)
         {
             var getSingleTask = await _serviceManager.TaskService.GetById(taskId, cancellation);
             return getSingleTask;

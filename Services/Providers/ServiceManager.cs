@@ -10,9 +10,9 @@ namespace Services.Providers
     {
         private readonly Lazy<IPersonService> _personService;
         private readonly Lazy<ITaskService> _taskService;
-        public ServiceManager(IRepositoryManager repositoryManager, IMapper mapper, ILogger<TaskService> logger)
+        public ServiceManager(IRepositoryManager repositoryManager, IMapper mapper, ILogger<TaskService> logger, ILogger<PersonService> _logger)
         {
-            _personService = new Lazy<IPersonService>(() => new PersonService(repositoryManager, mapper));
+            _personService = new Lazy<IPersonService>(() => new PersonService(repositoryManager, mapper,_logger));
             _taskService = new Lazy<ITaskService>(() => new TaskService(repositoryManager, mapper, logger));
         }
 
