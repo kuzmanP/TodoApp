@@ -110,7 +110,7 @@ namespace Services.Providers
                 }
                 taskEntity.PersonId = personId;
                 entity.Task.Add(taskEntity);
-                var createTaskEntity = await _repositoryManager.TaskRepository.CreateAsync(taskEntity, cancellationToken);
+                var createTaskEntity = await _repositoryManager.TaskRepository.CreateTaskAsync(taskEntity, cancellationToken);
                 _repositoryManager.Save();
             }
             catch (Exception ex)

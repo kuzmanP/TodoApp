@@ -34,7 +34,7 @@ namespace Repository.Providers
         }
 
 
-        public async Task<bool> CreateAsync(Tasks tasks, CancellationToken cancellation)
+        public async Task<bool> CreateTaskAsync(Tasks tasks, CancellationToken cancellation)
         {
             try
             {
