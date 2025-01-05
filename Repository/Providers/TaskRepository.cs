@@ -47,7 +47,7 @@ namespace Repository.Providers
             }
         }
 
-        public async Task<bool> UpdateAsync(Tasks tasks, CancellationToken cancellation)
+        public async Task<bool> UpdateTaskAsync(Tasks tasks, CancellationToken cancellation)
         {
             try
             {

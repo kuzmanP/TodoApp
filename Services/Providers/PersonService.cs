@@ -60,7 +60,7 @@ namespace Services.Providers
             var entityDto = _mapper.Map(person, entity);
             try
             {
-                var updatePerson = await _repositoryManager.PersonRepository.UpdateAsync(entityDto, cancellationToken);
+                var updatePerson = await _repositoryManager.PersonRepository.UpdatePersonAsync(entityDto, cancellationToken);
                 _repositoryManager.Save();
                 return updatePerson;
             }
@@ -95,7 +95,7 @@ namespace Services.Providers
             {
                 var deleteEntity = await _repositoryManager.PersonRepository.DeleteAsync(Id, cancellationToken);
                 _repositoryManager.Save();
-                return true;
+                return deleteEntity;
             }
             catch (Exception ex)
             {

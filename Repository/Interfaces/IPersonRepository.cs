@@ -8,6 +8,6 @@ namespace Repository.Interfaces
         Task<bool> DeleteAsync(Guid Id, CancellationToken cancellation);
         Task<Person> GetUniqueAsync(Guid Id, CancellationToken cancellation);
         Task<bool> CreatePersonAsync(Person person, CancellationToken cancellation);
-        Task<bool> UpdateAsync(Person person, CancellationToken cancellation);
+        Task<bool> UpdatePersonAsync(Person person, CancellationToken cancellation);
     }
 }

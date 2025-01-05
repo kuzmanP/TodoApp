@@ -69,7 +69,7 @@ namespace Services.Providers
                 try
                 {
                     var updateTask =
-                        await _repositoryManager.TaskRepository.UpdateAsync(taskEntityDto, cancellationToken);
+                        await _repositoryManager.TaskRepository.UpdateTaskAsync(taskEntityDto, cancellationToken);
                     _repositoryManager.Save();
                     return updateTask;
                 }
@@ -157,12 +157,12 @@ namespace Services.Providers
             if (setCode == 1)
             {
                 getTask.IsCompleted = true;
-                await _repositoryManager.TaskRepository.UpdateAsync(getTask, cancellationToken);
+                await _repositoryManager.TaskRepository.UpdateTaskAsync(getTask, cancellationToken);
                 _repositoryManager.Save();
                 return true;
             }
             getTask.IsCompleted = false;
-            await _repositoryManager.TaskRepository.UpdateAsync(getTask, cancellationToken);
+            await _repositoryManager.TaskRepository.UpdateTaskAsync(getTask, cancellationToken);
             _repositoryManager.Save();
             return false;
         }
