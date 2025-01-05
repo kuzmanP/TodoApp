@@ -2,10 +2,12 @@
 using Services.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Shared.Dtos.Task;
+using Shared.Dtos.Person;
+using System.Net.Mime;
 
 namespace Presentation.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/v1/[controller]")]
     [ApiController]
     public class TasksController:ControllerBase
     {
@@ -16,8 +18,11 @@ namespace Presentation.Controllers
             _serviceManager = serviceManager;
         }
 
-        [HttpGet("AllTasks")]
-        [ProducesResponseType(StatusCodes.Status302Found)]
+        [HttpGet]
+        [Produces(MediaTypeNames.Application.Json)]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(TaskDto))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(bool))]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(string))]
         public async Task<IEnumerable<TaskDto>> GetAllTasks(CancellationToken cancellation)
         {
             var getAllTasks = await _serviceManager.TaskService.GetAll(cancellation);
@@ -25,26 +30,36 @@ namespace Presentation.Controllers
 
         }
 
-        [HttpGet("singleTask")]
+        [HttpGet("{id}")]
+        [Produces(MediaTypeNames.Application.Json)]
+        [ProducesResponseType(StatusCodes.Status302Found, Type = typeof(TaskDto))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(bool))]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(string))]
         [ProducesResponseType(StatusCodes.Status302Found)]
-        public async Task<TaskDto?> GetUniqueTask(Guid taskId, CancellationToken cancellation)
+        public async Task<TaskDto?> GetUniqueTask(Guid id, CancellationToken cancellation)
         {
-            var getSingleTask = await _serviceManager.TaskService.GetById(taskId, cancellation);
+            var getSingleTask = await _serviceManager.TaskService.GetById(id, cancellation);
             return getSingleTask;
 
         }
 
-        [HttpPut("UpdateTask")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<bool> UpdateTask(Guid personId, Guid taskId, [FromBody] UpdateTaskDto updateTask, CancellationToken cancellation)
+        [HttpPut("{id}")]
+        [Produces(MediaTypeNames.Application.Json)]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(TaskDto))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(bool))]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(string))]
+        public async Task<bool> UpdateTask(Guid personId, Guid id, [FromBody] UpdateTaskDto updateTask, CancellationToken cancellation)
         {
-            var result = await _serviceManager.TaskService.Update(personId, taskId, updateTask, cancellation);
+            var result = await _serviceManager.TaskService.Update(personId, id, updateTask, cancellation);
             return result;
 
         }
 
-        [HttpPost("CreateTask")]
-        [ProducesResponseType(StatusCodes.Status201Created)]
+        [HttpPost]
+        [Produces(MediaTypeNames.Application.Json)]
+        [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(TaskDto))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(bool))]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(string))]
         public async Task<bool> CreateTask(Guid personId,[FromBody] CreateTaskDto createTask, CancellationToken cancellation)
         {
             var result = await _serviceManager.TaskService.Create(personId, createTask, cancellation);
@@ -52,21 +67,27 @@ namespace Presentation.Controllers
 
         }
 
-        [HttpDelete("DeleteTask")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<bool> DeleteTask(Guid taskId, CancellationToken cancellation)
+        [HttpDelete("{id}")]
+        [Produces(MediaTypeNames.Application.Json)]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(bool))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(bool))]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(string))]
+        public async Task<bool> DeleteTask(Guid id, CancellationToken cancellation)
         {
-            var result = await _serviceManager.TaskService.Delete(taskId, cancellation);
+            var result = await _serviceManager.TaskService.Delete(id, cancellation);
             return result;
 
         }
 
 
-        [HttpGet("checkTaskStatus")]
-        [ProducesResponseType(StatusCodes.Status302Found)]
-        public async Task<OkObjectResult> CheckTaskStatus(Guid taskId, CancellationToken cancellation)
+        [HttpGet("{id}/status")]
+        [Produces(MediaTypeNames.Application.Json)]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(bool))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(bool))]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(string))]
+        public async Task<OkObjectResult> CheckTaskStatus(Guid id, CancellationToken cancellation)
         {
-            var result =await _serviceManager.TaskService.CheckStatus(taskId, cancellation);
+            var result =await _serviceManager.TaskService.CheckStatus(id, cancellation);
             if (result)
             {
                 var data = "Task Completed";
@@ -77,11 +98,14 @@ namespace Presentation.Controllers
             return Ok(data1);
         }
 
-        [HttpGet("setTaskStatus")]
-        [ProducesResponseType(StatusCodes.Status302Found)]
-        public async Task<OkObjectResult> SetTaskStatus(Guid taskId, int setCode, CancellationToken cancellation)
+        [HttpGet("{id}/setStatus")]
+        [Produces(MediaTypeNames.Application.Json)]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(bool))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(bool))]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(string))]
+        public async Task<OkObjectResult> SetTaskStatus(Guid id, int setCode, CancellationToken cancellation)
         {
-            var result = await _serviceManager.TaskService.SetStatus(taskId, setCode, cancellation);
+            var result = await _serviceManager.TaskService.SetStatus(id, setCode, cancellation);
             if (result)
             {
                 var data = "Task Status set";

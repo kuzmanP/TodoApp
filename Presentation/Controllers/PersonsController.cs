@@ -7,7 +7,7 @@ using System.Net.Mime;
 
 namespace Presentation.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/v1/[controller]")]
     [ApiController]
     public class PersonsController : ControllerBase
     {
