@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Http;
 using Shared.Dtos.Person;
 using Shared.Dtos.Task;
 using System.Net.Mime;
+using Shared.Responses;
 
 namespace Presentation.Controllers
 {
@@ -24,10 +25,22 @@ namespace Presentation.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(bool))]
         [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(string))]
         [ProducesResponseType(StatusCodes.Status302Found)]
-        public async  Task<IEnumerable<PersonDto>> GetAllPersons(CancellationToken cancellation)
+        public async  Task<IEnumerable<ApiResponse<PersonDto>>> GetAllPersons(CancellationToken cancellation)
         {
-            var getAllPersons =await _serviceManager.PersonService.GetAll(cancellation);
-            return getAllPersons;
+            try
+            {
+                var getAllPersons = await _serviceManager.PersonService.GetAll(cancellation);
+                return getAllPersons.Select(person => ApiResponse<PersonDto>.SuccessResponse(person));
+            }
+            catch (Exception ex)
+            {
+
+                return new List<ApiResponse<PersonDto>>()
+                {
+                    ApiResponse<PersonDto>.ErrorResponse(ex.Message,$"{ex.Message}")
+                };
+
+            }
 
         }
 
@@ -38,11 +51,25 @@ namespace Presentation.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(bool))]
         [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(string))]
         [ProducesResponseType(StatusCodes.Status302Found)]
-        public async Task<PersonDto?> GetUniquePerson(Guid id, CancellationToken cancellation)
+        public async Task<ApiResponse<PersonDto>> GetUniquePerson(Guid id, CancellationToken cancellation)
         {
-            var getSinglePersons =await  _serviceManager.PersonService.GetById(id, cancellation);
-            return getSinglePersons;
+            try
+            {
+                var getSinglePersons = await _serviceManager.PersonService.GetById(id, cancellation);
+                if (getSinglePersons != null)
+                {
+                    return ApiResponse<PersonDto>.SuccessResponse(getSinglePersons);
+                }
+                
+                return ApiResponse<PersonDto>.ErrorResponse("Not Found");
+            }
+            catch (Exception ex)
+            {
 
+                return ApiResponse<PersonDto>.ErrorResponse(ex.Message, $"{ex.Message}");
+
+            }
+           
         }
 
         [HttpPut("{id}")]
