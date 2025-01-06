@@ -2,7 +2,6 @@
 using Services.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Shared.Dtos.Task;
-using Shared.Dtos.Person;
 using System.Net.Mime;
 
 namespace Presentation.Controllers
