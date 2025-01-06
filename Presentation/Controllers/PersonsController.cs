@@ -78,10 +78,19 @@ namespace Presentation.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(bool))]
         [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(string))]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<bool> UpdatePerson(Guid id, [FromBody] UpdatePersonDto updatePerson, CancellationToken cancellation)
+        public async Task<ApiResponse<bool>> UpdatePerson(Guid id, [FromBody] UpdatePersonDto updatePerson, CancellationToken cancellation)
         {
-            var result =await _serviceManager.PersonService.Update(id, updatePerson, cancellation);
-            return result;
+            try
+            {
+                var result = await _serviceManager.PersonService.Update(id, updatePerson, cancellation);
+                return ApiResponse<bool>.SuccessResponse(result);
+            }
+            catch (Exception  ex)
+            {
+
+                return ApiResponse<bool>.ErrorResponse(ex.Message,$"{ex.Message}");
+            }
+            
 
         }
 
@@ -90,10 +99,19 @@ namespace Presentation.Controllers
         [Produces(MediaTypeNames.Application.Json)]
         [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(bool))]
         [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(string))]
-        public async Task<bool> CreatePerson([FromBody] CreatePersonDto createPerson, CancellationToken cancellation)
+        public async Task<ApiResponse<bool>> CreatePerson([FromBody] CreatePersonDto createPerson, CancellationToken cancellation)
         {
-            var result =await  _serviceManager.PersonService.Create(createPerson, cancellation);
-            return result;
+            try
+            {
+                var result = await _serviceManager.PersonService.Create(createPerson, cancellation);
+                return ApiResponse<bool>.SuccessResponse(result);
+            }
+            catch (Exception ex)
+            {
+
+                return ApiResponse<bool>.ErrorResponse(ex.Message,$"{ex.Message}");
+            }
+            
 
         }
 
@@ -103,10 +121,19 @@ namespace Presentation.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(bool))]
         [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(string))]
         [ProducesResponseType(StatusCodes.Status302Found)]
-        public async Task<bool> DeletePerson(Guid id, CancellationToken cancellation)
+        public async Task<ApiResponse<bool>> DeletePerson(Guid id, CancellationToken cancellation)
         {
-            var result =await _serviceManager.PersonService.Delete(id, cancellation);
-            return result;
+            try
+            {
+                var result = await _serviceManager.PersonService.Delete(id, cancellation);
+                return ApiResponse<bool>.SuccessResponse(result);
+            }
+            catch (Exception ex)
+            {
+
+                return ApiResponse<bool>.ErrorResponse(ex.Message);
+            }
+           
 
         }
 
@@ -116,10 +143,22 @@ namespace Presentation.Controllers
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(TaskDto))]
         [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(bool))]
         [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(string))]
-        public async Task<IEnumerable<TaskDto>> AllPersonTasks(Guid id, CancellationToken cancellation)
+        public async Task<IEnumerable<ApiResponse<TaskDto>>> AllPersonTasks(Guid id, CancellationToken cancellation)
         {
-            var getAllPersons =await  _serviceManager.TaskService.FetchPersonTask(id, cancellation);
-            return getAllPersons;
+            try
+            {
+                var getAllPersons = await _serviceManager.TaskService.FetchPersonTask(id, cancellation);
+                return getAllPersons.Select(task => ApiResponse<TaskDto>.SuccessResponse(task));
+            }
+            catch (Exception ex)
+            {
+
+                return new List<ApiResponse<TaskDto>>()
+                {
+                    ApiResponse<TaskDto>.ErrorResponse(ex.Message,$"{ex.Message}")
+                };
+            }
+            
 
         }
     }
