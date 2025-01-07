@@ -3,6 +3,7 @@ using Services.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Shared.Dtos.Task;
 using System.Net.Mime;
+using Shared.Responses;
 
 namespace Presentation.Controllers
 {
@@ -22,10 +23,21 @@ namespace Presentation.Controllers
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(TaskDto))]
         [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(bool))]
         [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(string))]
-        public async Task<IEnumerable<TaskDto>> GetAllTasks(CancellationToken cancellation)
+        public async Task<IEnumerable<ApiResponse<TaskDto>>> GetAllTasks(CancellationToken cancellation)
         {
-            var getAllTasks = await _serviceManager.TaskService.GetAll(cancellation);
-            return getAllTasks;
+            try
+            {
+                var getAllTasks = await _serviceManager.TaskService.GetAll(cancellation);
+                return getAllTasks.Select(task => ApiResponse<TaskDto>.SuccessResponse(task));
+            }
+            catch (Exception ex)
+            {
+
+                return new List<ApiResponse<TaskDto>>()
+                {
+                    ApiResponse<TaskDto>.ErrorResponse(ex.Message)
+                };
+            }           
 
         }
 
@@ -35,10 +47,18 @@ namespace Presentation.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(bool))]
         [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(string))]
         [ProducesResponseType(StatusCodes.Status302Found)]
-        public async Task<TaskDto?> GetUniqueTask(Guid id, CancellationToken cancellation)
+        public async Task<ApiResponse<TaskDto?>> GetUniqueTask(Guid id, CancellationToken cancellation)
         {
-            var getSingleTask = await _serviceManager.TaskService.GetById(id, cancellation);
-            return getSingleTask;
+            try
+            {
+                var getSingleTask = await _serviceManager.TaskService.GetById(id, cancellation);
+                return ApiResponse<TaskDto?>.SuccessResponse(getSingleTask);
+            }
+            catch (Exception ex)
+            {
+
+                return ApiResponse<TaskDto?>.ErrorResponse(ex.Message);
+            }
 
         }
 
@@ -47,10 +67,17 @@ namespace Presentation.Controllers
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(TaskDto))]
         [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(bool))]
         [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(string))]
-        public async Task<bool> UpdateTask(Guid personId, Guid id, [FromBody] UpdateTaskDto updateTask, CancellationToken cancellation)
+        public async Task<ApiResponse<bool>> UpdateTask(Guid personId, Guid id, [FromBody] UpdateTaskDto updateTask, CancellationToken cancellation)
         {
-            var result = await _serviceManager.TaskService.Update(personId, id, updateTask, cancellation);
-            return result;
+            try
+            {
+                var result = await _serviceManager.TaskService.Update(personId, id, updateTask, cancellation);
+                return ApiResponse<bool>.SuccessResponse(result);
+            }
+            catch (Exception ex)
+            {
+                return ApiResponse<bool>.ErrorResponse(ex.Message);
+            }
 
         }
 
@@ -59,10 +86,18 @@ namespace Presentation.Controllers
         [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(TaskDto))]
         [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(bool))]
         [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(string))]
-        public async Task<bool> CreateTask(Guid personId,[FromBody] CreateTaskDto createTask, CancellationToken cancellation)
+        public async Task<ApiResponse<bool>> CreateTask(Guid personId,[FromBody] CreateTaskDto createTask, CancellationToken cancellation)
         {
-            var result = await _serviceManager.TaskService.Create(personId, createTask, cancellation);
-            return result;
+            try
+            {
+                var result = await _serviceManager.TaskService.Create(personId, createTask, cancellation);
+                return ApiResponse<bool>.SuccessResponse(result);
+            }
+            catch (Exception ex)
+            {
+
+               return ApiResponse<bool>.ErrorResponse(ex.Message);
+            }
 
         }
 
@@ -71,10 +106,18 @@ namespace Presentation.Controllers
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(bool))]
         [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(bool))]
         [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(string))]
-        public async Task<bool> DeleteTask(Guid id, CancellationToken cancellation)
+        public async Task<ApiResponse<bool>> DeleteTask(Guid id, CancellationToken cancellation)
         {
-            var result = await _serviceManager.TaskService.Delete(id, cancellation);
-            return result;
+            try
+            {
+                var result = await _serviceManager.TaskService.Delete(id, cancellation);
+                return ApiResponse<bool>.SuccessResponse(result);
+            }
+            catch (Exception ex)
+            {
+
+               return ApiResponse<bool>.ErrorResponse(ex.Message);
+            }
 
         }
 
@@ -118,10 +161,21 @@ namespace Presentation.Controllers
 
         [HttpGet("AllOverDueTasks")]
         [ProducesResponseType(StatusCodes.Status302Found)]
-        public  IEnumerable<TaskDto> AllOverDueTasks(CancellationToken cancellation)
+        public  IEnumerable<ApiResponse<TaskDto>> AllOverDueTasks(CancellationToken cancellation)
         {
-            var getAllOverDueTask = _serviceManager.TaskService.GetAllOverdueTask(cancellation);
-            return getAllOverDueTask;
+            try
+            {
+                var getAllOverDueTask = _serviceManager.TaskService.GetAllOverdueTask(cancellation);
+                return getAllOverDueTask.Select(allTasks => ApiResponse<TaskDto>.SuccessResponse(allTasks));
+            }
+            catch (Exception ex)
+            {
+
+                return new List<ApiResponse<TaskDto>>()
+                {
+                    ApiResponse<TaskDto>.ErrorResponse(ex.Message)
+                };
+            }
 
         }
     }
